@@ -33,4 +33,68 @@ class EventTest {
         assertThat(event.getName(), is(equalTo(name)));
         assertThat(event.getDescription(), is(equalTo(description)));
     }
+
+
+    @Test
+    public void testFree() {
+        //Given
+        Event event = Event.builder()
+                .basePrice(0)
+                .maxPrice(0)
+                .build();
+        //When
+        event.update();
+
+        //Then
+        assertThat(event.isFree(), is(true));
+
+
+        //Given
+        event = Event.builder()
+                .basePrice(100)
+                .maxPrice(0)
+                .build();
+        //When
+        event.update();
+
+        //Then
+        assertThat(event.isFree(), is(false));
+
+
+        //Given
+        event = Event.builder()
+                .basePrice(0)
+                .maxPrice(100)
+                .build();
+        //When
+        event.update();
+
+        //Then
+        assertThat(event.isFree(), is(false));
+    }
+
+
+    @Test
+    public void testOffline() {
+        //Given
+        Event event = Event.builder()
+                .location("판교로 552번길 26-")
+                .build();
+
+        //When
+        event.update();
+
+        //Then
+        assertThat(event.isOffline(), is(true));
+
+        //Given
+        event = Event.builder()
+                .build();
+
+        //When
+        event.update();
+
+        //Then
+        assertThat(event.isOffline(), is(false));
+    }
 }
