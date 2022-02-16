@@ -2,7 +2,11 @@ package com.sanghun.inflearnrestapi.events;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.core.ControllerEntityLinks;
+import org.springframework.hateoas.server.mvc.ControllerLinkRelationProvider;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -47,8 +51,13 @@ public class EventController {
         event.update();
         Event newEvent = this.eventRepository.save(event);
 
-        URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
+        WebMvcLinkBuilder webMvcLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+        URI createdUri = webMvcLinkBuilder.toUri();
 
-        return ResponseEntity.created(createdUri).body(event);
+        EventResource eventResource = new EventResource(event);
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+        eventResource.add(webMvcLinkBuilder.withRel("update-event"));
+
+        return ResponseEntity.created(createdUri).body(eventResource);
     }
 }
