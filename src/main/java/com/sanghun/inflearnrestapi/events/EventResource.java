@@ -14,7 +14,6 @@ public class EventResource extends EntityModel<Event> {
         add(linkTo(EventController.class).slash(event.getId()).withSelfRel());
     }
 
-
 //    @JsonUnwrapped
 //    private Event event;
 //
