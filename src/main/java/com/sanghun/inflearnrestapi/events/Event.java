@@ -1,5 +1,6 @@
 package com.sanghun.inflearnrestapi.events;
 
+import com.sanghun.inflearnrestapi.accounts.Account;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,9 @@ public class Event {
 
     @Enumerated(EnumType.ORDINAL)
     private EventStatus eventStatus = EventStatus.DRAFT;
+
+    @ManyToOne
+    private Account manager;
 
     public void update() {
         if (this.basePrice == 0 && this.maxPrice == 0 ) {
